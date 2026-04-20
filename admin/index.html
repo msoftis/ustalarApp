@@ -123,7 +123,7 @@
                             <div class="space-y-6">
                                 <div>
                                     <label class="block text-sm font-semibold text-slate-600 mb-2">Banner Başlığı / Metni</label>
-                                    <input type="text" id="ad-title" placeholder="Örn: Buraya Reklam Verebilirsiniz (�nerilen: 1200x400 veya 1200x200 px)" class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-orange-500">
+                                    <input type="text" id="ad-title" placeholder="Örn: Buraya Reklam Verebilirsiniz" class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-orange-500">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-semibold text-slate-600 mb-2">Yönlendirme Linki</label>
@@ -190,51 +190,7 @@
             <div id="view-brand" class="view-content hidden">
                 <div class="mb-8">
                     <h2 class="text-3xl font-bold text-slate-800">Brand Yönetimi</h2>
-                    <p class="text-slate-500">Brand sayfasındaki başlık görseli ve hizmetleri yönetin.</p>
-                </div>
-
-                <div class="grid grid-cols-1 gap-8 mb-10">
-                    <!-- BRAND SLIDER MANAGEMENT -->
-                    <div class="glass-card p-6 md:p-8">
-                        <h3 class="text-lg font-bold mb-6 flex items-center text-slate-700 uppercase tracking-wider text-sm">
-                            <span class="w-2 h-6 bg-purple-500 rounded-full mr-3"></span> Brand Sayfası Slider (Max 3 Resim)
-                        </h3>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <!-- Slot 1 -->
-                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
-                                <label class="block text-xs font-bold text-slate-500 mb-2 uppercase">1. Görsel (1200x500)</label>
-                                <div id="brand-preview-0" class="w-full h-32 bg-white rounded-lg mb-3 border-2 border-dashed border-slate-200 overflow-hidden flex items-center justify-center">
-                                    <span class="text-[10px] text-slate-400">Yüklenmedi</span>
-                                </div>
-                                <input type="text" id="brand-link-0" placeholder="Link (opsiyonel)" class="w-full text-[10px] px-2 py-1.5 rounded border border-slate-200 mb-2 outline-none focus:ring-1 focus:ring-purple-500">
-                                <input type="file" id="brand-file-0" accept="image/*" class="text-[10px] w-full file:bg-slate-800 file:text-white file:rounded file:border-0 p-1">
-                            </div>
-                            <!-- Slot 2 -->
-                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
-                                <label class="block text-xs font-bold text-slate-500 mb-2 uppercase">2. Görsel (1200x500)</label>
-                                <div id="brand-preview-1" class="w-full h-32 bg-white rounded-lg mb-3 border-2 border-dashed border-slate-200 overflow-hidden flex items-center justify-center">
-                                    <span class="text-[10px] text-slate-400">Yüklenmedi</span>
-                                </div>
-                                <input type="text" id="brand-link-1" placeholder="Link (opsiyonel)" class="w-full text-[10px] px-2 py-1.5 rounded border border-slate-200 mb-2 outline-none focus:ring-1 focus:ring-purple-500">
-                                <input type="file" id="brand-file-1" accept="image/*" class="text-[10px] w-full file:bg-slate-800 file:text-white file:rounded file:border-0 p-1">
-                            </div>
-                            <!-- Slot 3 -->
-                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
-                                <label class="block text-xs font-bold text-slate-500 mb-2 uppercase">3. Görsel (1200x500)</label>
-                                <div id="brand-preview-2" class="w-full h-32 bg-white rounded-lg mb-3 border-2 border-dashed border-slate-200 overflow-hidden flex items-center justify-center">
-                                    <span class="text-[10px] text-slate-400">Yüklenmedi</span>
-                                </div>
-                                <input type="text" id="brand-link-2" placeholder="Link (opsiyonel)" class="w-full text-[10px] px-2 py-1.5 rounded border border-slate-200 mb-2 outline-none focus:ring-1 focus:ring-purple-500">
-                                <input type="file" id="brand-file-2" accept="image/*" class="text-[10px] w-full file:bg-slate-800 file:text-white file:rounded file:border-0 p-1">
-                            </div>
-                        </div>
-                        <div class="mt-8 flex items-center justify-between border-t pt-6">
-                            <p class="text-xs text-slate-400 italic">Değiştirmek istediğiniz slotlara yeni dosya seçip kaydetmeniz yeterlidir.</p>
-                            <button onclick="saveBrandSlider()" id="brand-save-btn" class="bg-purple-600 text-white font-bold py-3 px-10 rounded-xl shadow-lg hover:bg-purple-700 transition flex items-center">
-                                <i class="fas fa-save mr-2"></i> Slider'ı Güncelle
-                            </button>
-                        </div>
-                    </div>
+                    <p class="text-slate-500">Brand sayfasındaki hizmetleri yönetin.</p>
                 </div>
 
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
@@ -365,7 +321,6 @@
             if(view === 'services') loadServices();
             if(view === 'izleyap') loadVideos();
             if(view === 'brand') {
-                loadBrandSlider();
                 loadBrandServices();
             }
         };
@@ -496,81 +451,7 @@
             loadCurrentBanner();
         }
 
-        // BRAND SLIDER MANAGEMENT
-        let currentSliderItems = [
-            { imageUrl: "", linkUrl: "" },
-            { imageUrl: "", linkUrl: "" },
-            { imageUrl: "", linkUrl: "" }
-        ];
 
-        async function loadBrandSlider() {
-            try {
-                const dSnap = await getDoc(doc(db, "settings", "brandBanner"));
-                if (dSnap.exists()) {
-                    const data = dSnap.data();
-                    
-                    if (data.sliderItems && Array.isArray(data.sliderItems)) {
-                        currentSliderItems = data.sliderItems;
-                    } else if (data.imageUrls && Array.isArray(data.imageUrls)) {
-                        // Eski yapıdan dönüşüm
-                        currentSliderItems = data.imageUrls.map(url => ({ imageUrl: url, linkUrl: "" }));
-                    }
-
-                    // UI Güncelle
-                    for(let i=0; i<3; i++) {
-                        const item = currentSliderItems[i] || { imageUrl: "", linkUrl: "" };
-                        const preview = document.getElementById(`brand-preview-${i}`);
-                        const linkInput = document.getElementById(`brand-link-${i}`);
-                        
-                        if(item.imageUrl) {
-                            preview.innerHTML = `<img src="${item.imageUrl}" class="w-full h-full object-cover">`;
-                        } else {
-                            preview.innerHTML = `<span class="text-[10px] text-slate-400">Yüklenmedi</span>`;
-                        }
-                        linkInput.value = item.linkUrl || "";
-                    }
-                }
-            } catch(e) { console.error("Slider yükleme hatası:", e); }
-        }
-
-        window.saveBrandSlider = async () => {
-            const btn = document.getElementById('brand-save-btn');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Bekleyin...';
-
-            try {
-                const newItems = [...currentSliderItems];
-                
-                for(let i=0; i<3; i++) {
-                    const file = document.getElementById(`brand-file-${i}`).files[0];
-                    const linkUrl = sanitizeUrl(document.getElementById(`brand-link-${i}`).value);
-                    
-                    // Link her durumda güncellenir
-                    if (!newItems[i]) newItems[i] = { imageUrl: "", linkUrl: "" };
-                    newItems[i].linkUrl = linkUrl;
-
-                    // Eğer yeni dosya seçilmişse yükle
-                    if (file) {
-                        const sRef = ref(storage, `brand_slider/image_${i}_${Date.now()}.jpg`);
-                        await uploadBytes(sRef, file);
-                        const downloadUrl = await getDownloadURL(sRef);
-                        newItems[i].imageUrl = downloadUrl;
-                    }
-                }
-
-                await setDoc(doc(db, "settings", "brandBanner"), { sliderItems: newItems }, { merge: true });
-                currentSliderItems = newItems;
-                await loadBrandSlider();
-                alert("Slider başarıyla güncellendi!");
-                for(let i=0; i<3; i++) document.getElementById(`brand-file-${i}`).value = "";
-            } catch(e) { 
-                console.error(e);
-                alert("Slider güncellenirken bir hata oluştu!"); 
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-save mr-2"></i> Slider\'ı Güncelle';
-            }
-        };
 
         // SERVICES MANAGEMENT
         async function loadServices() {
