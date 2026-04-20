@@ -81,85 +81,77 @@
             <div id="view-ads" class="view-content">
                 <div class="mb-8">
                     <h2 class="text-3xl font-bold text-slate-800">Reklam Yönetimi</h2>
-                    <p class="text-slate-500">Uygulama genelindeki reklam alanlarını buradan yönetin.</p>
+                    <p class="text-slate-500">Her sayfa için özel Alt ve Üst banner alanlarını yönetin.</p>
                 </div>
 
-                <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
-                    <!-- ALT BANNER (MAIN SCREEN) -->
-                    <div class="glass-card p-6 md:p-8">
-                        <h3 class="text-lg font-bold mb-6 flex items-center text-slate-700 uppercase tracking-wider text-sm">
-                            <span class="w-2 h-6 bg-blue-500 rounded-full mr-3"></span> Alt Banner (Ana Sayfa)
-                        </h3>
-                        <div class="space-y-6">
-                            <div class="flex items-center justify-between bg-slate-50 p-4 rounded-xl border border-slate-200">
-                                <div>
-                                    <span class="block font-bold">Reklam Aktif</span>
-                                    <span class="text-xs text-slate-500">Ana sayfada gösterilsin mi?</span>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" id="ad-isActive" class="sr-only peer">
-                                    <div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                                </label>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-slate-600 mb-2">Başlık</label>
-                                <input type="text" id="ad-title" class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-slate-600 mb-2">Link</label>
-                                <input type="text" id="ad-linkUrl" class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-slate-600 mb-2">Banner Görseli (Önerilen: 1200x200 px)</label>
-                                <div class="flex items-center space-x-4">
-                                    <div id="ad-preview" class="w-24 h-16 bg-slate-100 rounded-lg overflow-hidden border-2 border-dashed border-slate-200 flex items-center justify-center">
-                                        <span class="text-[10px] text-slate-400">Görsel Yok</span>
-                                    </div>
-                                    <input type="file" id="ad-file" accept="image/*" class="text-xs text-slate-500 file:bg-slate-800 file:text-white file:px-4 file:py-2 file:rounded-lg cursor-pointer">
-                                </div>
-                            </div>
-                            <button onclick="saveAdSettings('banner')" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-blue-700 transition">Ana Banneri Güncelle</button>
+                <div class="glass-card p-6 md:p-8 mb-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">Sayfa Seçin</label>
+                            <select id="ad-page-selector" onchange="loadCurrentBanner()" class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-orange-500">
+                                <option value="webview">Ana Sayfa (Web)</option>
+                                <option value="services">Hizmetlerimiz</option>
+                                <option value="catalog">E-Katalog</option>
+                                <option value="news">Haberler</option>
+                                <option value="brand">Brand Sayfası</option>
+                                <option value="izleyap">İzle-Yap</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">Pozisyon</label>
+                            <select id="ad-pos-selector" onchange="loadCurrentBanner()" class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-orange-500">
+                                <option value="top">Üst Banner (Top)</option>
+                                <option value="bottom">Alt Banner (Bottom)</option>
+                            </select>
                         </div>
                     </div>
 
-                    <!-- ÜST BANNER (SERVICES SCREEN) -->
-                    <div class="glass-card p-6 md:p-8 border-orange-100">
-                        <h3 class="text-lg font-bold mb-6 flex items-center text-slate-700 uppercase tracking-wider text-sm">
-                            <span class="w-2 h-6 bg-orange-500 rounded-full mr-3"></span> Üst Banner (Hizmetler)
-                        </h3>
-                        <div class="space-y-6">
-                            <div class="flex items-center justify-between bg-orange-50 p-4 rounded-xl border border-orange-100">
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                        <div class="flex items-center justify-between mb-6">
+                            <div>
+                                <h3 id="current-banner-name" class="font-bold text-slate-800">Ana Sayfa - Üst Banner</h3>
+                                <p class="text-xs text-slate-500">Banner ayarlarını bu panelden yapabilirsiniz.</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="ad-isActive" class="sr-only peer">
+                                <div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-600"></div>
+                                <span class="ml-3 text-sm font-medium text-slate-600">Aktif</span>
+                            </label>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="space-y-6">
                                 <div>
-                                    <span class="block font-bold">Reklam Aktif</span>
-                                    <span class="text-xs text-slate-500">Hizmetler sayfasında gösterilsin mi?</span>
+                                    <label class="block text-sm font-semibold text-slate-600 mb-2">Banner Başlığı / Metni</label>
+                                    <input type="text" id="ad-title" placeholder="Örn: Buraya Reklam Verebilirsiniz" class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-orange-500">
                                 </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" id="had-isActive" class="sr-only peer">
-                                    <div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-600"></div>
-                                </label>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-slate-600 mb-2">Başlık</label>
-                                <input type="text" id="had-title" class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-orange-500">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-slate-600 mb-2">Link</label>
-                                <input type="text" id="had-linkUrl" class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-orange-500">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-slate-600 mb-2">Banner Görseli (Önerilen: 1200x400 px)</label>
-                                <div class="flex items-center space-x-4">
-                                    <div id="had-preview" class="w-24 h-16 bg-slate-100 rounded-lg overflow-hidden border-2 border-dashed border-slate-200 flex items-center justify-center">
-                                        <span class="text-[10px] text-slate-400">Görsel Yok</span>
+                                <div>
+                                    <label class="block text-sm font-semibold text-slate-600 mb-2">Yönlendirme Linki</label>
+                                    <input type="text" id="ad-linkUrl" placeholder="https://..." class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-orange-500">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-slate-600 mb-2">Banner Görseli</label>
+                                    <div class="flex items-center space-x-4">
+                                        <div id="ad-preview" class="w-32 h-20 bg-white rounded-lg border-2 border-dashed border-slate-200 overflow-hidden flex items-center justify-center">
+                                            <span class="text-[10px] text-slate-400">Görsel Yok</span>
+                                        </div>
+                                        <div class="flex-1">
+                                            <input type="file" id="ad-file" accept="image/*" class="text-xs text-slate-500 file:bg-slate-800 file:text-white file:px-4 file:py-2 file:rounded-lg cursor-pointer">
+                                            <p class="text-[10px] text-slate-400 mt-2">Görsel seçtiğinizde eskisiyle değiştirilir.</p>
+                                        </div>
                                     </div>
-                                    <input type="file" id="had-file" accept="image/*" class="text-xs text-slate-500 file:bg-slate-800 file:text-white file:px-4 file:py-2 file:rounded-lg cursor-pointer">
                                 </div>
                             </div>
-                            <button onclick="saveAdSettings('hizmetBanner')" class="w-full btn-orange text-white font-bold py-4 rounded-xl shadow-lg transition">Üst Banneri Güncelle</button>
+                            <div class="flex flex-col justify-end">
+                                <button onclick="saveCurrentBanner()" class="w-full btn-orange text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transition flex items-center justify-center space-x-2">
+                                    <i class="fas fa-save"></i>
+                                    <span>Banneri Kaydet</span>
+                                </button>
+                                <p id="save-status" class="text-xs font-bold text-center mt-4 hidden"></p>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <p id="save-status" class="text-sm font-bold text-center mt-8"></p>
             </div>
 
             <!-- SERVICES VIEW -->
@@ -427,57 +419,82 @@
         };
 
         // ADS MANAGEMENT
-        async function loadAdSettings() {
+        window.loadCurrentBanner = async () => {
+            const page = document.getElementById('ad-page-selector').value;
+            const pos = document.getElementById('ad-pos-selector').value;
+            const docId = `${page}_${pos}`;
+            
+            // UI Update
+            const pageName = document.querySelector(`#ad-page-selector option[value="${page}"]`).textContent;
+            const posName = document.querySelector(`#ad-pos-selector option[value="${pos}"]`).textContent;
+            document.getElementById('current-banner-name').textContent = `${pageName} - ${posName}`;
+            
+            // Reset UI
+            document.getElementById('ad-preview').innerHTML = '<span class="text-[10px] text-slate-400">Yükleniyor...</span>';
+            document.getElementById('ad-file').value = "";
+            document.getElementById('save-status').classList.add('hidden');
+
             try {
-                // Load Main Banner
-                const doc1 = await getDoc(doc(db, "settings", "banner"));
-                if (doc1.exists()) {
-                    const d = doc1.data();
-                    document.getElementById('ad-isActive').checked = d.isActive;
+                const dSnap = await getDoc(doc(db, "banners", docId));
+                if (dSnap.exists()) {
+                    const d = dSnap.data();
+                    document.getElementById('ad-isActive').checked = d.isActive || false;
                     document.getElementById('ad-title').value = d.title || "";
                     document.getElementById('ad-linkUrl').value = d.linkUrl || "";
-                    if (d.imageUrl) document.getElementById('ad-preview').innerHTML = `<img src="${d.imageUrl}" class="w-full h-full object-cover">`;
+                    if (d.imageUrl) {
+                        document.getElementById('ad-preview').innerHTML = `<img src="${d.imageUrl}" class="w-full h-full object-cover">`;
+                    } else {
+                        document.getElementById('ad-preview').innerHTML = '<span class="text-[10px] text-slate-400">Görsel Yok</span>';
+                    }
+                } else {
+                    document.getElementById('ad-isActive').checked = false;
+                    document.getElementById('ad-title').value = "";
+                    document.getElementById('ad-linkUrl').value = "";
+                    document.getElementById('ad-preview').innerHTML = '<span class="text-[10px] text-slate-400">Kayıt Yok</span>';
                 }
-                // Load Service Banner
-                const doc2 = await getDoc(doc(db, "settings", "hizmetBanner"));
-                if (doc2.exists()) {
-                    const d = doc2.data();
-                    document.getElementById('had-isActive').checked = d.isActive;
-                    document.getElementById('had-title').value = d.title || "";
-                    document.getElementById('had-linkUrl').value = d.linkUrl || "";
-                    if (d.imageUrl) document.getElementById('had-preview').innerHTML = `<img src="${d.imageUrl}" class="w-full h-full object-cover">`;
-                }
-            } catch(e) {}
-        }
+            } catch(e) {
+                console.error(e);
+            }
+        };
 
-        window.saveAdSettings = async (type) => {
-            const prefix = type === 'banner' ? 'ad' : 'had';
-            const isActive = document.getElementById(`${prefix}-isActive`).checked;
-            const title = document.getElementById(`${prefix}-title`).value;
-            const linkUrl = sanitizeUrl(document.getElementById(`${prefix}-linkUrl`).value);
-            const file = document.getElementById(`${prefix}-file`).files[0];
+        window.saveCurrentBanner = async () => {
+            const page = document.getElementById('ad-page-selector').value;
+            const pos = document.getElementById('ad-pos-selector').value;
+            const docId = `${page}_${pos}`;
+            
+            const isActive = document.getElementById('ad-isActive').checked;
+            const title = document.getElementById('ad-title').value;
+            const linkUrl = sanitizeUrl(document.getElementById('ad-linkUrl').value);
+            const file = document.getElementById('ad-file').files[0];
             const statusText = document.getElementById('save-status');
 
-            statusText.textContent = "Güncelleniyor...";
-            
+            statusText.textContent = "Kaydediliyor...";
+            statusText.className = "text-xs font-bold text-center mt-4 text-orange-500 block";
+            statusText.classList.remove('hidden');
+
             try {
                 let updateData = { isActive, title, linkUrl };
                 if (file) {
-                    const sRef = ref(storage, `ads/${type}_image.jpg`);
+                    const sRef = ref(storage, `banners/${docId}_${Date.now()}.jpg`);
                     await uploadBytes(sRef, file);
                     updateData.imageUrl = await getDownloadURL(sRef);
                 }
-                // Döküman yoksa oluşturur (setDoc with merge)
-                await setDoc(doc(db, "settings", type), updateData, { merge: true });
-                statusText.className = "text-sm font-bold text-center mt-8 text-green-600";
-                statusText.textContent = "✓ Başarıyla güncellendi!";
-                loadAdSettings();
+                
+                await setDoc(doc(db, "banners", docId), updateData, { merge: true });
+                statusText.textContent = "✓ Başarıyla Kaydedildi!";
+                statusText.className = "text-xs font-bold text-center mt-4 text-green-600 block";
+                setTimeout(() => loadCurrentBanner(), 1000);
             } catch(e) { 
                 console.error(e);
-                statusText.className = "text-sm font-bold text-center mt-8 text-red-500";
-                statusText.textContent = "Hata oluştu! Kuralları kontrol edin."; 
+                statusText.textContent = "Hata oluştu!";
+                statusText.className = "text-xs font-bold text-center mt-4 text-red-500 block";
             }
         };
+
+        async function loadAdSettings() {
+            // İlk açılışta varsayılanı yükle
+            loadCurrentBanner();
+        }
 
         // BRAND SLIDER MANAGEMENT
         let currentSliderItems = [
