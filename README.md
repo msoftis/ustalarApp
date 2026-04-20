@@ -1,4 +1,3 @@
 Ustalar.com Android App
 
-
-https://makifkeskin.github.io/ustalar_app/
+https://msoftis.github.io/ustalarApp/
