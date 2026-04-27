@@ -13,6 +13,161 @@
         .bg-ustalar-orange { background-color: #f97316; }
         .glass-header { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(10px); }
         .hero-gradient { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
+        
+        /* CHATBOT STYLES */
+        #ai-chat-fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 100;
+            width: 150px;
+            height: 150px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: float-mascot 3s ease-in-out infinite;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
+        }
+        #ai-chat-fab:hover { 
+            transform: scale(1.1) rotate(5deg); 
+            filter: drop-shadow(0 15px 25px rgba(249, 115, 22, 0.4)); 
+            animation-play-state: paused; 
+        }
+        @keyframes float-mascot {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+            100% { transform: translateY(0px); }
+        }
+
+        #ai-chat-window {
+            position: fixed;
+            bottom: 6rem;
+            right: 2rem;
+            width: 380px;
+            height: 550px;
+            z-index: 101;
+            display: none;
+            flex-direction: column;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+            transform-origin: bottom right;
+            animation: slide-in-chat 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes slide-in-chat {
+            0% { transform: scale(0.5) translateY(100px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        .chat-header {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            padding: 1.25rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-between: space-between;
+        }
+        .chat-messages {
+            flex: 1;
+            padding: 1.25rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .msg-bubble {
+            max-width: 80%;
+            padding: 0.75rem 1rem;
+            border-radius: 1.25rem;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        .msg-ai {
+            background: white;
+            color: #1e293b;
+            align-self: flex-start;
+            border-bottom-left-radius: 0.25rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .msg-user {
+            background: #f97316;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 0.25rem;
+        }
+        .chat-input-area {
+            padding: 1rem;
+            background: rgba(255,255,255,0.5);
+            border-top: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            gap: 0.5rem;
+        }
+        .chat-input-area input {
+            flex: 1;
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 0.6rem 1rem;
+            border-radius: 9999px;
+            outline: none;
+            font-size: 0.9rem;
+        }
+        .chat-input-area input:focus { border-color: #f97316; }
+        
+        /* Recommendation Cards */
+        .rec-card {
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            margin-top: 0.5rem;
+            transition: transform 0.2s;
+        }
+        .rec-card:hover { transform: translateY(-2px); }
+        
+        /* Auto Notification Bubble */
+        .chat-notification {
+            position: fixed;
+            bottom: 140px;
+            right: 130px;
+            background: white;
+            color: #1e293b;
+            padding: 12px 18px;
+            border-radius: 16px 16px 0px 16px;
+            box-shadow: 0 10px 25px rgba(249, 115, 22, 0.2);
+            font-size: 0.85rem;
+            font-weight: 700;
+            z-index: 99;
+            opacity: 0;
+            transform: translateY(20px) scale(0.9);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+            border: 2px solid #f97316;
+        }
+        .chat-notification.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        .chat-notification::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 15px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid #f97316;
+        }
+        
+        @media (max-width: 480px) {
+            #ai-chat-window {
+                width: calc(100vw - 2rem);
+                height: 70vh;
+                right: 1rem;
+                bottom: 5rem;
+            }
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900">
@@ -21,12 +176,29 @@
     <header class="fixed w-full z-50 glass-header border-b border-slate-700">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <div class="flex items-center space-x-3">
-                <span class="text-white font-bold text-xl tracking-tight">Ustalar.com App</span>
+                <img src="assets/images/ustalar_vector.png" alt="Ustalar Logo" class="h-16 w-16 object-contain drop-shadow-md">
+                <span class="text-white font-bold text-xl tracking-tight">Ustalar.com</span>
             </div>
+            <!-- Masaüstü Menü -->
             <nav class="hidden md:flex items-center space-x-8 text-slate-300 font-medium">
                 <a href="#ozellikler" class="hover:text-orange-500 transition">Özellikler</a>
                 <a href="https://play.google.com/store/apps/details?id=com.ustalar.ustalar_com" target="_blank" class="bg-ustalar-orange text-white px-5 py-2 rounded-full font-bold hover:scale-105 transition transform">İndir</a>
             </nav>
+
+            <!-- Mobil Hamburger Buton -->
+            <button id="mobile-menu-btn" class="md:hidden text-slate-300 hover:text-white transition focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Mobil Menü İçeriği (Sadece mobilde görünür) -->
+        <div id="mobile-menu" class="hidden md:hidden glass-header border-t border-slate-700">
+            <div class="px-6 py-6 flex flex-col space-y-4">
+                <a href="#ozellikler" class="text-slate-300 hover:text-orange-500 font-medium text-lg transition" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Özellikler</a>
+                <a href="https://play.google.com/store/apps/details?id=com.ustalar.ustalar_com" target="_blank" class="bg-ustalar-orange text-white px-5 py-3 rounded-xl font-bold text-center shadow-lg w-full mt-2">Hemen İndir</a>
+            </div>
         </div>
     </header>
 
@@ -120,6 +292,237 @@
             </div>
         </div>
     </footer>
+
+    <!-- AI CHATBOT UI -->
+    <div id="ai-chat-notification" class="chat-notification">
+        👋 Merhaba! Size nasıl yardımcı olabilirim?
+    </div>
+    
+    <div id="ai-chat-fab">
+        <img src="assets/images/ustalar_vector.png" alt="Ustalar AI" class="w-full h-full object-contain">
+    </div>
+
+    <div id="ai-chat-window">
+        <div class="chat-header">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-robot text-white"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-sm">Ustalar Of AI</h3>
+                    <p class="text-[10px] opacity-80">Çevrimiçi Asistan</p>
+                </div>
+            </div>
+            <button id="close-chat" class="hover:bg-white/20 p-1 rounded transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        
+        <div id="chat-messages" class="chat-messages">
+            <div class="msg-bubble msg-ai">
+                Merhaba! Ben Ustalar.com'un yapay zeka asistanıyım. Size nasıl yardımcı olabilirim?
+                <div class="flex flex-wrap gap-2 mt-3">
+                    <button onclick="quickAction('Hizmetler')" class="text-[10px] bg-slate-100 px-3 py-1.5 rounded-full hover:bg-slate-200 transition">Hizmetler</button>
+                    <button onclick="quickAction('Ustalar TV')" class="text-[10px] bg-slate-100 px-3 py-1.5 rounded-full hover:bg-slate-200 transition">Ustalar TV</button>
+                    <button onclick="quickAction('Usta Çağır')" class="text-[10px] bg-slate-100 px-3 py-1.5 rounded-full hover:bg-slate-200 transition">Usta Çağır</button>
+                    <button onclick="quickAction('Yapı Market')" class="text-[10px] bg-slate-100 px-3 py-1.5 rounded-full hover:bg-slate-200 transition">Yapı Market</button>
+                    <button onclick="quickAction('OF AI')" class="text-[10px] bg-slate-100 px-3 py-1.5 rounded-full hover:bg-slate-200 transition">OF AI</button>
+                    <button onclick="quickAction('FabricaAI')" class="text-[10px] bg-slate-100 px-3 py-1.5 rounded-full hover:bg-slate-200 transition">FabricaAI</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Mesajınızı yazın...">
+            <button id="send-msg" class="bg-ustalar-orange text-white p-2 rounded-full hover:scale-105 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- AI CHATBOT LOGIC -->
+    <script type="module">
+        // --- KONFIGURASYON ---
+        // Buraya OpenRouter'dan aldığınız API anahtarını ekleyin
+        const OPENROUTER_API_KEY = "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"; 
+        
+        const FAB = document.getElementById('ai-chat-fab');
+        const CHAT_WINDOW = document.getElementById('ai-chat-window');
+        const CLOSE_BTN = document.getElementById('close-chat');
+        const SEND_BTN = document.getElementById('send-msg');
+        const INPUT = document.getElementById('chat-input');
+        const MESSAGES_CONTAINER = document.getElementById('chat-messages');
+
+        // BİLGİ HAVUZU (Knowledge Base)
+        const KNOWLEDGE_BASE = `
+            Sen Ustalar.com'un resmi yapay zeka asistanısın (Ustalar Of AI).
+            Kullanıcılara nazik, profesyonel ve yardımcı davranmalısın.
+            
+            HAKKIMIZDA:
+            - Ustalar.com bir kurumsal hizmet ve teknoloji ekosistemidir.
+            - Mobil uygulamamızda 25'ten fazla hizmet ve AI araçları bulunur.
+            - Google Play Linki: https://play.google.com/store/apps/details?id=com.ustalar.ustalar_com
+            
+            ÖNEREBİLECEĞİN HİZMETLER:
+            1. Ustalar.com (Genel Usta Platformu)
+            2. Eskidiyse (Eskimiş eşyalar için dönüşüm/tamir)
+            3. SektörTürk (Kurumsal firma rehberi)
+            
+            ÖNEREBİLECEĞİN VİDEOLAR:
+            - "Ekonominin Sesi" eğitim serisi.
+            - "Nasıl Yapılır?" teknik videoları.
+            
+            KURALLAR:
+            - Cevapların kısa ve öz olsun.
+            - Eğer kullanıcı bir hizmet veya yardım arıyorsa mutlaka ilgili linki veya "Mobil Uygulamamızı indirin" önerisini sun.
+            - Markdown formatını kullanabilirsin.
+            - Ürün önerirken şık bir dil kullan.
+        `;
+
+        let chatHistory = [
+            { role: "system", content: KNOWLEDGE_BASE }
+        ];
+
+        // SES EFEKTLERİ (Web Audio API - Kesin çalışır, indirme gerektirmez)
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const audioCtx = new AudioContext();
+
+        const playSound = (type) => {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            if (type === 'send') {
+                // Gönderme Sesi (Yumuşak "Pop")
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.1);
+                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.1);
+            } else if (type === 'receive') {
+                // Gelme Sesi (Tatlı "Ting")
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
+                gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.4);
+            }
+        };
+
+        // UI Eventleri
+        
+        // Mobil Hamburger Menü
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.onclick = () => {
+                mobileMenu.classList.toggle('hidden');
+            };
+        }
+
+        FAB.onclick = () => {
+            const notif = document.getElementById('ai-chat-notification');
+            if (notif) notif.classList.remove('show'); // Tıklanınca balonu gizle
+
+            CHAT_WINDOW.style.display = CHAT_WINDOW.style.display === 'flex' ? 'none' : 'flex';
+            if (CHAT_WINDOW.style.display === 'flex') {
+                INPUT.focus();
+                playSound('receive'); // Açılışta hafif bir bildirim sesi
+            }
+        };
+
+        // Sayfa açıldıktan 2 saniye sonra otomatik bildirim
+        setTimeout(() => {
+            if (CHAT_WINDOW.style.display !== 'flex') {
+                const notif = document.getElementById('ai-chat-notification');
+                if (notif) notif.classList.add('show');
+                playSound('receive'); // Bildirim sesini çal
+            }
+        }, 2000);
+
+        CLOSE_BTN.onclick = () => CHAT_WINDOW.style.display = 'none';
+
+        const addMessage = (text, sender) => {
+            const div = document.createElement('div');
+            div.className = `msg-bubble ${sender === 'user' ? 'msg-user' : 'msg-ai'}`;
+            // Basit bir markdown temizliği
+            div.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+            MESSAGES_CONTAINER.appendChild(div);
+            MESSAGES_CONTAINER.scrollTop = MESSAGES_CONTAINER.scrollHeight;
+            
+            // Mesaj eklendiğinde sesi çal
+            if (sender === 'user') {
+                playSound('send');
+            } else {
+                playSound('receive');
+            }
+        };
+
+        window.quickAction = (action) => {
+            INPUT.value = action;
+            sendMessage();
+        };
+
+        const sendMessage = async () => {
+            const text = INPUT.value.trim();
+            if (!text) return;
+
+            addMessage(text, 'user');
+            INPUT.value = '';
+            
+            // Yükleniyor efekti
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'msg-bubble msg-ai italic opacity-50';
+            loadingDiv.textContent = 'Düşünüyor...';
+            MESSAGES_CONTAINER.appendChild(loadingDiv);
+            MESSAGES_CONTAINER.scrollTop = MESSAGES_CONTAINER.scrollHeight;
+
+            // Yapay zeka (API) geçici olarak devre dışı bırakıldı. Hazır cevap sistemi:
+            setTimeout(() => {
+                loadingDiv.remove();
+                
+                let aiResponse = "";
+                const lowerText = text.toLowerCase();
+
+                if (lowerText.includes("hizmet") || lowerText.includes("ne iş")) {
+                    aiResponse = "Ustalar.com Mobil uygulamasında başlıca şu hizmetler bulunur:<br><br>📺 **Ustalar TV:** Eğitici ve teknik videolar.<br>🛠️ **Usta Çağır:** İhtiyacınız olan ustaya anında ulaşın.<br>🛒 **Yapı Market:** Kaliteli ve güvenilir malzemeler.<br>🤖 **OF AI & FabricaAI:** Bireysel ve endüstriyel akıllı yapay zeka çözümlerimiz.";
+                } else if (lowerText.includes("tv") || lowerText.includes("video") || lowerText.includes("izle")) {
+                    aiResponse = "Ustalar TV ile 'İzle-Yap' teknik videolarına ve eğitici içeriklere uygulamamız üzerinden anında erişebilirsiniz.";
+                } else if (lowerText.includes("usta") || lowerText.includes("çağır")) {
+                    aiResponse = "Size en uygun ustayı hemen bulmak için ücretsiz mobil uygulamamızı kullanabilirsiniz: <br><br>👉 <a href='https://play.google.com/store/apps/details?id=com.ustalar.ustalar_com' target='_blank' style='text-decoration: underline; color: #f97316;'>Hemen İndir</a>";
+                } else if (lowerText.includes("yapı") || lowerText.includes("market")) {
+                    aiResponse = "Yapı market ihtiyaçlarınız için en kaliteli malzemeler ve tedarikçi ağı Ustalar.com güvencesiyle hizmetinizde.";
+                } else if (lowerText.includes("of ai") || lowerText.includes("yapay zeka")) {
+                    aiResponse = "OF AI, Ustalar.com'un size özel geliştirdiği akıllı asistandır. Ustalarla ve hizmetlerle ilgili sorularınıza anında yanıt verir.";
+                } else if (lowerText.includes("fabricaai") || lowerText.includes("fabrica ai")) {
+                    aiResponse = "FabricaAI, endüstriyel çözümler ve kurumsal zeka odaklı yepyeni yapay zeka servisimizdir. Sektöre özel akıllı çözümler sunar.";
+                } else if (lowerText.includes("merhaba") || lowerText.includes("selam")) {
+                    aiResponse = "Merhaba! Ben Ustalar.com asistanıyım. Size hizmetlerimiz, videolarımız veya usta bulma konusunda yardımcı olabilirim.";
+                } else {
+                    aiResponse = "🤖 Şu anda yapay zeka sistemimiz geliştirme aşamasındadır. Lütfen şimdilik yukarıdaki **Hazır Menülerimizi** kullanın veya detaylı bilgi için Ustalar.com mobil uygulamasını indirin.";
+                }
+                
+                addMessage(aiResponse, 'ai');
+            }, 1200); // 1.2 saniyelik doğal "düşünme" gecikmesi
+        };
+
+        SEND_BTN.onclick = sendMessage;
+        INPUT.onkeypress = (e) => { if (e.key === 'Enter') sendMessage(); };
+    </script>
 
 </body>
 </html>
